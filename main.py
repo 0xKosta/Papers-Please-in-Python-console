@@ -57,6 +57,7 @@ def check_discrepency(person, date):
 
 def clear():
     os.system('cls')
+    os.system('clear')
 
 def passport_display(data):
     '''This function displays the passport of a person.'''
