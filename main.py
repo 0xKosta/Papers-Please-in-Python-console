@@ -10,20 +10,20 @@
 ###################################
 
 import random
-import time
+from playsound import playsound
+import time as t
 import os
 
 
 def choose_discrepency(discrepency_present):
-    '''This function lets you choose which data to verify.'''
     possible_choices_1 = ["Y", "N"]
-    possible_choices_2 = ["NAME", "GENDER", "DOB", "EXP", "EXIT"]
+    possible_choices_2 = ["NAME", "GENDER", "DOB", "EXP", "EXIT", "NAT"]
     discrepency_choice = input("Do you want to check for discrepencies? [Y/N]").upper()
     while discrepency_choice not in possible_choices_1:
         discrepency_choice = input("Incorrect input, choose Y (yes) or N (no).").upper()
     if discrepency_choice == "Y":
         print("Type exit to exit the discrepency menu.")
-        parameter = input("Which parameter would you like to check? [NAME/GENDER/DOB/EXP].").upper()
+        parameter = input("Which parameter would you like to check? [NAME/GENDER/DOB/EXP/NAT].").upper()
         while parameter != "EXIT":
             while parameter not in possible_choices_2:
                 parameter = input("Incorrect input, choose NAME, GENDER, DOB or EXP.").upper()
@@ -42,9 +42,7 @@ def choose_discrepency(discrepency_present):
 
 
 def check_discrepency(person, date):
-    '''This function checks if there are any discrepencies present.'''
     if date[2] > person["expire"][2]:
-        print("year bad")
         return True
     if date[2] == person["expire"][2]:
         if date[1] > person["expire"][1]:
@@ -56,11 +54,9 @@ def check_discrepency(person, date):
 
 
 def clear():
-    os.system('cls') #Windows clear command
-    #os.system('clear') #Unix clear command, uncomment to use.
+    os.system('cls')
 
 def passport_display(data):
-    '''This function displays the passport of a person.'''
     dateofbirth = str(data['dob'][0]) + "/" + str(data['dob'][1]) + "/" + str(data['dob'][2])
     expirydate = str(data['expire'][0]) + "/" + str(data['expire'][1]) + "/" + str(data['expire'][2])
     print('''---------------------------------------------------------
@@ -70,13 +66,12 @@ def passport_display(data):
        @@@@@@@@@@@@       | GENDER: {}
         @@@@@@@@@         | DATE OF BIRTH: {}
           @@@@@@          | EXPIRY DATE: {}
-          @@@@@@          |
+          @@@@@@          | NATIONALITY: {}
     @@@@@@@@@@@@@@@@@@    |
  @@@@@@@@@@@@@@@@@@@@@@@@ |
- ---------------------------------------------------------'''.format(data["name"], data["gender"], dateofbirth,expirydate))
+ ---------------------------------------------------------'''.format(data["name"], data["gender"], dateofbirth,expirydate, data["nationality"].upper()))
 
 def expire_date():
-    '''Generates a random expiry date.'''
     month_length = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     year = random.randint(1981, 1988)
     month = random.randint(1, 12)
@@ -169,16 +164,16 @@ def choose_full_name_gender():
     return (full_name, gender)
 
 def generate_person():
-    '''Combines every generation function to create a person's passport.'''
+    countries = ["Arstotzka", "Antegria", "Impor", "Kolechia", "Obristan", "Republia", "United Federation"]
     name, gender = choose_full_name_gender()
     dob = choose_birthdate()
     weight = random.randint(57, 93)
     height = random.randint(160, 195)
     expire = expire_date()
-    return {"name" : name, "gender" : gender, "dob" : dob, "weight" : weight, "height" : height,"expire" : expire}
+    nationality = countries[random.randint(0, 6)]
+    return {"name" : name, "gender" : gender, "dob" : dob, "weight" : weight, "height" : height,"expire" : expire, "nationality" : nationality}
 
 def approve_deny(discrepency_present):
-    '''This function handles approval and denial of a person's entry.'''
     possible_choices = ["APPROVE", "DENY"]
     approve = input("Do you want to [APPROVE] or [DENY] entry to this person?").upper()
     while approve not in possible_choices:
@@ -193,20 +188,53 @@ def approve_deny(discrepency_present):
             print("You have gotten a citation! No discrepencies were present!")
 
 
+def menu():
+    print('''
+ ____                    ___
+|  _ \                  / _ \ 
+| |_) |_   ___  ____  _| | | |    ________________
+|  _ <| | | \ \/ /\ \/ / | | |   |github.com/Buxx0|
+| |_) | |_| |>  <  >  <| |_| |    ----------------
+|____/ \__,_/_/\_\/_/\_\\\___/    Papers, Please.py
+''')
+    t.sleep(3)
+    clear()
+    print("Please support the release of Papers, Please on steam, iOS and Android.")
+    print("And it's creator, LUCAS POPE.")
+    t.sleep(3)
+    clear()
+
+
 def play():
-    '''Main function.'''
-    todaysdate = (10,11,1982)
-    count = 0
-    while count != -1:
-        person = generate_person()
-        passport_display(person)
-        print("Today's date is: {}/{}/{}".format(todaysdate[0],todaysdate[1],todaysdate[2]))
-        discrepency_present = check_discrepency(person, todaysdate)
-        choose_discrepency(discrepency_present)
-        approve_deny(discrepency_present)
-        input("Press enter to call in the next person.")
+    month_length = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+    menu()
+    todaysdate = [10,11,1982]
+    while todaysdate != [31, 2, 1983]:
         clear()
-        count += 1
+        count = 0
+        maximum = random.randint(8, 14)
+        while count != maximum:
+            person = generate_person()
+            passport_display(person)
+            print("Today's date is: {}/{}/{}".format(todaysdate[0],todaysdate[1],todaysdate[2]))
+            discrepency_present = check_discrepency(person, todaysdate)
+            choose_discrepency(discrepency_present)
+            approve_deny(discrepency_present)
+            input("Press enter to call in the next person.")
+            clear()
+            count += 1
+        if todaysdate[0] == month_length[todaysdate[1]]:
+            if todaysdate[1] != 12:
+                todaysdate[1] += 1
+            else:
+                todaysdate[1] = 1
+                todaysdate[2] += 1
+        else:
+            todaysdate[0] += 1
+        clear()
+        print("The border closes for the day, and you walk home.")
+        t.sleep(3)
 
 
+playsound("papers.mp3", False)
 play()
