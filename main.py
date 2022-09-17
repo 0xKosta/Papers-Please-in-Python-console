@@ -15,6 +15,7 @@ import os
 
 
 def choose_discrepency(discrepency_present):
+    '''This function lets you choose which data to verify.'''
     possible_choices_1 = ["Y", "N"]
     possible_choices_2 = ["NAME", "GENDER", "DOB", "EXP", "EXIT"]
     discrepency_choice = input("Do you want to check for discrepencies? [Y/N]").upper()
@@ -41,6 +42,7 @@ def choose_discrepency(discrepency_present):
 
 
 def check_discrepency(person, date):
+    '''This function checks if there are any discrepencies present.'''
     if date[2] > person["expire"][2]:
         print("year bad")
         return True
@@ -57,6 +59,7 @@ def clear():
     os.system('cls')
 
 def passport_display(data):
+    '''This function displays the passport of a person.'''
     dateofbirth = str(data['dob'][0]) + "/" + str(data['dob'][1]) + "/" + str(data['dob'][2])
     expirydate = str(data['expire'][0]) + "/" + str(data['expire'][1]) + "/" + str(data['expire'][2])
     print('''---------------------------------------------------------
@@ -72,6 +75,7 @@ def passport_display(data):
  ---------------------------------------------------------'''.format(data["name"], data["gender"], dateofbirth,expirydate))
 
 def expire_date():
+    '''Generates a random expiry date.'''
     month_length = {1: 31, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
     year = random.randint(1981, 1988)
     month = random.randint(1, 12)
@@ -164,6 +168,7 @@ def choose_full_name_gender():
     return (full_name, gender)
 
 def generate_person():
+    '''Combines every generation function to create a person's passport.'''
     name, gender = choose_full_name_gender()
     dob = choose_birthdate()
     weight = random.randint(57, 93)
@@ -172,6 +177,7 @@ def generate_person():
     return {"name" : name, "gender" : gender, "dob" : dob, "weight" : weight, "height" : height,"expire" : expire}
 
 def approve_deny(discrepency_present):
+    '''This function handles approval and denial of a person's entry.'''
     possible_choices = ["APPROVE", "DENY"]
     approve = input("Do you want to [APPROVE] or [DENY] entry to this person?").upper()
     while approve not in possible_choices:
@@ -187,6 +193,7 @@ def approve_deny(discrepency_present):
 
 
 def play():
+    '''Main function.'''
     todaysdate = (10,11,1982)
     count = 0
     while count != -1:
