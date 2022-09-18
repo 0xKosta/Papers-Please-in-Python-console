@@ -25,4 +25,4 @@ Please run it through the CMD, or PowerShell.                         |
                                                                       |
                                                                       |
 ----------------------------------------------------------------------|
-                THANK YOU FOR DOWNLOADING AND USING!
+                        THANK YOU FOR USING!
